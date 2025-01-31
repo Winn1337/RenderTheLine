@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class LineCreator : MonoBehaviour
 {
-    [SerializeField]
-    private Line linePrefab;
+    [Header("Lines")]
+    [SerializeField] private Line linePrefab;
+    [SerializeField] private float minDistance;
 
-    [SerializeField]
-    private float minDistance;
+    [Header("Player")]
+    [SerializeField] private Rigidbody2D playerBody;
+    private Vector3 playerStartPos;
+    private float playerStartRot;
 
     private Line currentLine;
     private Stack<Line> undoStack;
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Confined;
+
         undoStack = new();
     }
 
@@ -28,6 +33,8 @@ public class LineCreator : MonoBehaviour
             Draw();
         else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z))
             Undo();
+        else if (Input.GetKeyDown(KeyCode.Space))
+            StartStop();
     }
 
     private void StartDraw()
@@ -53,5 +60,23 @@ public class LineCreator : MonoBehaviour
 
         Line lastLine = undoStack.Pop();
         Destroy(lastLine.gameObject);
+    }
+
+    private void StartStop()
+    {
+        playerBody.simulated = !playerBody.simulated;
+
+        if (playerBody.simulated)
+        {
+            playerStartPos = playerBody.transform.position;
+            playerStartRot = playerBody.transform.eulerAngles.z;
+        }
+        else
+        {
+            playerBody.transform.position = playerStartPos;
+            playerBody.transform.eulerAngles = new Vector3(0, 0, playerStartRot);
+            playerBody.velocity = Vector2.zero;
+            playerBody.angularVelocity = 0f;
+        }
     }
 }
