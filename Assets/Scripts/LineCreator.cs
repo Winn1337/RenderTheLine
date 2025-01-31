@@ -11,6 +11,12 @@ public class LineCreator : MonoBehaviour
     private float minDistance;
 
     private Line currentLine;
+    private Stack<Line> undoStack;
+
+    private void Start()
+    {
+        undoStack = new();
+    }
 
     private void Update()
     {
@@ -20,6 +26,8 @@ public class LineCreator : MonoBehaviour
             StopDraw();
         else if (currentLine)
             Draw();
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z))
+            Undo();
     }
 
     private void StartDraw()
@@ -35,6 +43,15 @@ public class LineCreator : MonoBehaviour
 
     private void StopDraw()
     {
+        undoStack.Push(currentLine);
         currentLine = null;
+    }
+
+    private void Undo()
+    {
+        if (undoStack.Count == 0) return;
+
+        Line lastLine = undoStack.Pop();
+        Destroy(lastLine.gameObject);
     }
 }
