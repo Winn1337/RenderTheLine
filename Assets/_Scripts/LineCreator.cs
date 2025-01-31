@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LineCreator : MonoBehaviour
 {
+    [Header("This class currently handles all types of input from the user.")]
+    [Space(1f)]
+
     [Header("Lines")]
     [SerializeField] private Line linePrefab;
     [SerializeField] private float minDistance;
