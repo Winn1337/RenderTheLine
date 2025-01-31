@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -214,6 +215,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279ad643f04185149b6f449cd7edeca0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ToFollow: {fileID: 2123440290}
+  lerpSpeed: 5
+  offset: {x: 0, y: 0, z: -10}
 --- !u!1 &874346203
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,6 +683,7 @@ MonoBehaviour:
   linePrefab: {fileID: -2956793210336649774, guid: 6b931236233458946a7a0e59db5302a8, type: 3}
   minDistance: 0.33
   playerBody: {fileID: 2123440288}
+  cameraLerp: {fileID: 519420033}
 --- !u!1 &1876444877
 GameObject:
   m_ObjectHideFlags: 0

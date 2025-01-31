@@ -10,14 +10,18 @@ public class LineCreator : MonoBehaviour
     [Header("Lines")]
     [SerializeField] private Line linePrefab;
     [SerializeField] private float minDistance;
+    private Line currentLine;
+    private Stack<Line> undoStack;
 
     [Header("Player")]
     [SerializeField] private Rigidbody2D playerBody;
     private Vector3 playerStartPos;
     private float playerStartRot;
 
-    private Line currentLine;
-    private Stack<Line> undoStack;
+    [Header("Camera")]
+    [SerializeField] private LerpPosition cameraLerp;
+    private Vector3 cameraStartPos;
+
 
     private void Start()
     {
@@ -71,15 +75,22 @@ public class LineCreator : MonoBehaviour
 
         if (playerBody.simulated)
         {
+            // Start
             playerStartPos = playerBody.transform.position;
             playerStartRot = playerBody.transform.eulerAngles.z;
+            cameraLerp.ToFollow = playerBody.transform;
+            cameraStartPos = cameraLerp.transform.position;
+            cameraLerp.enabled = true;
         }
         else
         {
+            // Stop
             playerBody.transform.position = playerStartPos;
             playerBody.transform.eulerAngles = new Vector3(0, 0, playerStartRot);
             playerBody.velocity = Vector2.zero;
             playerBody.angularVelocity = 0f;
+            cameraLerp.transform.position = cameraStartPos;
+            cameraLerp.enabled = false;
         }
     }
 }
