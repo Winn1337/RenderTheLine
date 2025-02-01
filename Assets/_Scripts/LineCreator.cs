@@ -17,6 +17,7 @@ public class LineCreator : MonoBehaviour
     [SerializeField] private Rigidbody2D playerBody;
     private Vector3 playerStartPos;
     private float playerStartRot;
+    private PlayerStats playerStats;
 
     [Header("Camera")]
     [SerializeField] private LerpPosition cameraLerp;
@@ -25,8 +26,8 @@ public class LineCreator : MonoBehaviour
 
     private void Start()
     {
+        playerStats = playerBody.GetComponent<PlayerStats>();
         Cursor.lockState = CursorLockMode.Confined;
-
         undoStack = new();
     }
 
@@ -81,6 +82,7 @@ public class LineCreator : MonoBehaviour
             cameraLerp.ToFollow = playerBody.transform;
             cameraStartPos = cameraLerp.transform.position;
             cameraLerp.enabled = true;
+            playerStats.Restart();
         }
         else
         {
