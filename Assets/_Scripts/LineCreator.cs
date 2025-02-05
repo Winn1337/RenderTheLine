@@ -21,14 +21,20 @@ public class LineCreator : MonoBehaviour
 
     [Header("Camera")]
     [SerializeField] private LerpPosition cameraLerp;
+    [SerializeField] private Camera cam;
     private Vector3 cameraStartPos;
-
+    private Vector3 mouseAnchor;
 
     private void Start()
     {
         playerStats = playerBody.GetComponent<PlayerStats>();
         Cursor.lockState = CursorLockMode.Confined;
         undoStack = new();
+
+        if (!cam) cam = Camera.main;
+        if (!cameraLerp) cameraLerp = cam.GetComponent<LerpPosition>();
+        if (!playerBody) playerBody = GetComponent<Rigidbody2D>();
+        if (!linePrefab) Debug.LogWarning("NO LINE PREFAB WTF!!!");
     }
 
     private void Update()
@@ -43,6 +49,10 @@ public class LineCreator : MonoBehaviour
             UndoLine();
         else if (Input.GetKeyDown(KeyCode.Space))
             StartStopSimulation();
+        else if (Input.GetKeyDown(KeyCode.Mouse1))
+            StartDragCamera();
+        else if (Input.GetKey(KeyCode.Mouse1))
+            DragCamera();
     }
 
     private void StartDraw()
@@ -94,5 +104,21 @@ public class LineCreator : MonoBehaviour
             cameraLerp.transform.position = cameraStartPos;
             cameraLerp.enabled = false;
         }
+    }
+
+    private void StartDragCamera()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseAnchor = mousePos;
+    }
+
+    private void DragCamera()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector3 diff = mouseAnchor - mousePos;
+        cam.transform.position += diff;
+        //mouseAnchor -= diff;
+        mouseAnchor = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 }
