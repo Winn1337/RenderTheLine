@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.Build.Content;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -17,6 +20,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float topAirTime;
     [SerializeField] private float totalAirTime;
 
+    [Header("Flips")]
+    private float rotation;
+    [SerializeField] private float flips;
+    [SerializeField] private float totalFlips;
+
     private Rigidbody2D rigidBody;
     int samples;
     bool colliding;
@@ -31,34 +39,64 @@ public class PlayerStats : MonoBehaviour
         if (!textMesh) return;
         if (!rigidBody.simulated) return;
 
-        // Get speed stats
+        SpeedStats();
+        AirTimeStats();
+        FlipStats();
+        UpdateUI();
+
+        // Utility
+        colliding = false;
+        samples++;
+    }
+
+    private void SpeedStats()
+    {
         speed = rigidBody.velocity.magnitude;
         topSpeed = Mathf.Max(speed, topSpeed);
         avgSpeed = AddToAverage(avgSpeed, samples, speed);
+    }
 
-        // Get air time stats
+    private void AirTimeStats()
+    {
         if (colliding)
         {
             airTime = 0;
+            return;
+        }
+
+        airTime += Time.fixedDeltaTime;
+        totalAirTime += Time.fixedDeltaTime;
+        topAirTime = Mathf.Max(airTime, topAirTime);
+    }
+
+    private void FlipStats()
+    {
+        //if at least one wheel is off the ground, start counting rotation
+        if (!colliding)
+        {
+            rotation += rigidBody.angularVelocity * Time.fixedDeltaTime;
+            float _180sThisFrame = (int)(Mathf.Abs(rotation) / 180f);
+            Debug.Log(rotation + " " + _180sThisFrame);
+            rotation -= 180f * _180sThisFrame * Mathf.Sign(rotation);
+            flips += _180sThisFrame * 0.5f;
+            totalFlips += _180sThisFrame * 0.5f;
         }
         else
         {
-            airTime += Time.fixedDeltaTime;
-            totalAirTime += Time.fixedDeltaTime;
-            topAirTime = Mathf.Max(airTime, topAirTime);
+            rotation = 0f;
+            flips = 0;
         }
-
-        // Update UI
+    }
+    private void UpdateUI()
+    {
         textMesh.text = speed.ToString("00.0") + '\n' +
                         topSpeed.ToString("00.0") + '\n' +
                         avgSpeed.ToString("00.0") + '\n' +
                         airTime.ToString("00.0") + '\n' +
                         topAirTime.ToString("00.0") + '\n' +
-                        totalAirTime.ToString("00.0");
-
-        // Utility
-        colliding = false;
-        samples++;
+                        totalAirTime.ToString("00.0") + '\n' +
+                        flips.ToString("00.0") + '\n' +
+                        totalFlips.ToString("00.0");
     }
 
     public void Restart()
@@ -69,6 +107,8 @@ public class PlayerStats : MonoBehaviour
         airTime = 0;
         topAirTime = 0;
         totalAirTime = 0;
+        flips = 0;
+        totalFlips = 0;
     }
 
     private void OnCollisionStay2D(Collision2D collision)

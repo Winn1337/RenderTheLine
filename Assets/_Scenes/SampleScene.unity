@@ -450,7 +450,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -10, y: -130}
-  m_SizeDelta: {x: 175, y: 170}
+  m_SizeDelta: {x: 175, y: 205}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &411909187
 MonoBehaviour:
@@ -616,6 +616,9 @@ MonoBehaviour:
   maxZoom: 25
   minSpeed: 10
   maxSpeed: 100
+  manualZoomSpeed: 5
+  manualZoomMin: 1
+  manualZoomMax: 20
 --- !u!1 &520978319
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,17 +856,21 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '00.00
+  m_text: '00.0
 
-    00.00
+    00.0
 
-    00.00
+    00.0
 
-    00.00
+    00.0
 
-    00.00
+    00.0
 
-    00.00'
+    00.0
+
+    00.0
+
+    00.0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1673,6 +1680,7 @@ MonoBehaviour:
   minDistance: 0.5
   playerBody: {fileID: 2123440288}
   cameraLerp: {fileID: 519420033}
+  cam: {fileID: 0}
 --- !u!1 &1876444877
 GameObject:
   m_ObjectHideFlags: 0
@@ -2140,7 +2148,11 @@ MonoBehaviour:
     Top Air Time
 
     Total
-    Air Time'
+    Air Time
+
+    Flips
+
+    Total Flips'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2387,6 +2399,8 @@ MonoBehaviour:
   airTime: 0
   topAirTime: 0
   totalAirTime: 0
+  flips: 0
+  totalFlips: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
