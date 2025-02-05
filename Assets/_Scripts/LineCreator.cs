@@ -40,9 +40,9 @@ public class LineCreator : MonoBehaviour
         else if (currentLine)
             Draw();
         else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z))
-            Undo();
+            UndoLine();
         else if (Input.GetKeyDown(KeyCode.Space))
-            StartStop();
+            StartStopSimulation();
     }
 
     private void StartDraw()
@@ -62,7 +62,7 @@ public class LineCreator : MonoBehaviour
         currentLine = null;
     }
 
-    private void Undo()
+    private void UndoLine()
     {
         if (undoStack.Count == 0) return;
 
@@ -70,7 +70,7 @@ public class LineCreator : MonoBehaviour
         Destroy(lastLine.gameObject);
     }
 
-    private void StartStop()
+    private void StartStopSimulation()
     {
         playerBody.simulated = !playerBody.simulated;
 
